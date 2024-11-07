@@ -38,23 +38,20 @@ function Register() {
       return;
     }
     try {
-      const response = await fetch(
-        "https://todoapi.pythonanywhere.com/api/accounts/signin/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password: pwd }),
-        }
-      );
+      const response = await fetch("/api/accounts/signin/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: pwd }),
+      });
 
       if (response.ok) {
         setSuccess(true);
         navigate("/signin");
       } else {
-        setErrMsg("Ro'yxatdan o'tishda xato. Qaytadan urinib ko'ring.");
+        setErrMsg("Registration error. Please try again.");
       }
     } catch (error) {
-      setErrMsg("Tarmoq xatosi, iltimos keyinroq urinib ko'ring.");
+      setErrMsg("Network error! Please try again!");
     }
   };
 
