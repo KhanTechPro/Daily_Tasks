@@ -11,32 +11,26 @@ function Register() {
   const [pwd, setPwd] = useState("");
   const [matchPwd, setMatchPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
-  // Parol tasdiqlash faqat parol va tasdiqlash mos kelishini tekshiradi
   const [validMatch, setValidMatch] = useState(false);
 
   useEffect(() => {
-    if (userRef.current) {
-      userRef.current.focus();
-    }
+    userRef.current?.focus();
   }, []);
 
-  // Parol va tasdiqlash parolini tekshiradi
+  // Check if passwords match
   useEffect(() => {
     setValidMatch(pwd === matchPwd);
-  }, [pwd, matchPwd]);
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [email, pwd, matchPwd]);
+    if (errMsg) setErrMsg(""); // Clear error message on field changes
+  }, [pwd, matchPwd, errMsg]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validMatch) {
-      setErrMsg("Parollar mos kelmaydi. Iltimos, qayta tekshiring.");
+      setErrMsg("Passwords do not match.");
       return;
     }
+
     try {
       const response = await fetch("/api/accounts/signin/", {
         method: "POST",
@@ -45,13 +39,14 @@ function Register() {
       });
 
       if (response.ok) {
-        setSuccess(true);
         navigate("/signin");
+      } else if (response.status === 401) {
+        setErrMsg("Unauthorized. Please check your credentials.");
       } else {
-        setErrMsg("Registration error. Please try again.");
+        setErrMsg("Registration failed. Try again.");
       }
     } catch (error) {
-      setErrMsg("Network error! Please try again!");
+      setErrMsg("Network error! Please try again.");
     }
   };
 
@@ -107,7 +102,7 @@ function Register() {
             required
           />
           {!validMatch && matchPwd && (
-            <p className="text-red-500">Passwords must match</p>
+            <p className="text-red-500">Passwords must match.</p>
           )}
 
           <div className="flex items-center justify-center my-8">
