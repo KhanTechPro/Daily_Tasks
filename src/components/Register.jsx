@@ -8,42 +8,46 @@ function Register() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
   const [matchPwd, setMatchPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const [validMatch, setValidMatch] = useState(false);
 
   useEffect(() => {
-    userRef.current?.focus();
+    if (userRef.current) {
+      userRef.current.focus();
+    }
   }, []);
 
-  // Check if passwords match
   useEffect(() => {
     setValidMatch(pwd === matchPwd);
-    if (errMsg) setErrMsg(""); // Clear error message on field changes
-  }, [pwd, matchPwd, errMsg]);
+  }, [pwd, matchPwd]);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [email, username, pwd, matchPwd]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validMatch) {
-      setErrMsg("Passwords do not match.");
+      setErrMsg("Passwords do not match. Please check and try again.");
       return;
     }
-
     try {
-      const response = await fetch("/api/accounts/signin/", {
+      const response = await fetch("/accounts/signup/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password: pwd }),
+        body: JSON.stringify({ email, username, password: pwd }),
       });
 
       if (response.ok) {
+        setSuccess(true);
         navigate("/signin");
-      } else if (response.status === 401) {
-        setErrMsg("Unauthorized. Please check your credentials.");
       } else {
-        setErrMsg("Registration failed. Try again.");
+        setErrMsg("Registration error. Please try again.");
       }
     } catch (error) {
       setErrMsg("Network error! Please try again.");
@@ -65,13 +69,23 @@ function Register() {
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col relative top-4">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            ref={userRef}
+            className="border-2 p-1"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+
           <label htmlFor="email" className="mt-8">
             Email
           </label>
           <input
             type="email"
             id="email"
-            ref={userRef}
             className="border-2 p-1"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
