@@ -1,51 +1,87 @@
-// VerifyOtp.js
 import React, { useState } from "react";
+import Header from "./Header";
+import { useNavigate } from "react-router-dom";
 
-function VerifyOtp() {
-  const [otp, setOtp] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+function VerifyOTP() {
+  const [email, setEmail] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const navigate = useNavigate();
 
-  const handleOtpSubmit = async (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("/api/accounts/verify-otp/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ otp }),
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFTOKEN": "your-csrf-token-here", // Add your CSRF token if needed
+        },
+        body: JSON.stringify({ email, otp_code: otpCode }),
       });
+
       if (response.ok) {
-        setSuccess(true);
-        // Proceed to the next step, such as redirecting to the dashboard
+        navigate("/welcome"); // Redirect to a welcome or home page after verification
       } else {
-        setError("Invalid OTP. Please try again.");
+        const data = await response.json();
+        setErrMsg(
+          data.email
+            ? data.email[0]
+            : data.otp_code
+            ? data.otp_code[0]
+            : "Verification failed."
+        );
       }
-    } catch (err) {
-      setError("Network error. Please try again later.");
+    } catch (error) {
+      setErrMsg("Network error! Please try again.");
     }
   };
 
   return (
     <div>
-      <h2>Verify OTP</h2>
-      {error && <p className="error">{error}</p>}
-      {success ? (
-        <p>OTP verified successfully!</p>
-      ) : (
-        <form onSubmit={handleOtpSubmit}>
-          <label htmlFor="otp">Enter OTP</label>
+      <Header />
+      <div className="max-w-[1024px] md:w-[550px] md:h-[500px] mx-auto relative md:top-[100px] p-10 m-6 border-2 rounded-md">
+        <h2 className="md:text-3xl font-regular">Verify OTP</h2>
+        <p className="py-2">
+          Enter the OTP sent to your email to complete registration.
+        </p>
+        {errMsg && <p className="text-red-500">{errMsg}</p>}
+
+        <form onSubmit={handleVerify} className="flex flex-col relative top-4">
+          <label htmlFor="email">Email</label>
           <input
-            type="text"
-            id="otp"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
+            type="email"
+            id="email"
+            className="border-2 p-1"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <button type="submit">Verify</button>
+
+          <label htmlFor="otpCode" className="mt-8">
+            OTP Code
+          </label>
+          <input
+            type="text"
+            id="otpCode"
+            className="border-2 p-1"
+            value={otpCode}
+            onChange={(e) => setOtpCode(e.target.value)}
+            required
+          />
+
+          <div className="flex items-center justify-center my-8">
+            <button
+              type="submit"
+              className="bg-black text-white px-10 py-2 rounded-md font-Kanit"
+            >
+              Verify OTP
+            </button>
+          </div>
         </form>
-      )}
+      </div>
     </div>
   );
 }
 
-export default VerifyOtp;
+export default VerifyOTP;
