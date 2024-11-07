@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 
@@ -10,32 +10,10 @@ function Register() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
-  const [matchPwd, setMatchPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
-
-  const [validMatch, setValidMatch] = useState(false);
-
-  useEffect(() => {
-    if (userRef.current) {
-      userRef.current.focus();
-    }
-  }, []);
-
-  useEffect(() => {
-    setValidMatch(pwd === matchPwd);
-  }, [pwd, matchPwd]);
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [email, username, pwd, matchPwd]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validMatch) {
-      setErrMsg("Passwords do not match. Please check and try again.");
-      return;
-    }
     try {
       const response = await fetch("/accounts/signup/", {
         method: "POST",
@@ -44,7 +22,6 @@ function Register() {
       });
 
       if (response.ok) {
-        setSuccess(true);
         navigate("/signin");
       } else {
         setErrMsg("Registration error. Please try again.");
@@ -78,6 +55,7 @@ function Register() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            maxLength={255}
           />
 
           <label htmlFor="email" className="mt-8">
@@ -90,6 +68,7 @@ function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            maxLength={254}
           />
 
           <label htmlFor="password" className="mt-8">
@@ -102,28 +81,13 @@ function Register() {
             value={pwd}
             onChange={(e) => setPwd(e.target.value)}
             required
+            minLength={1}
           />
-
-          <label htmlFor="confirm_password" className="mt-8">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            id="confirm_password"
-            className="border-2 p-1"
-            value={matchPwd}
-            onChange={(e) => setMatchPwd(e.target.value)}
-            required
-          />
-          {!validMatch && matchPwd && (
-            <p className="text-red-500">Passwords must match.</p>
-          )}
 
           <div className="flex items-center justify-center my-8">
             <button
               type="submit"
               className="bg-black text-white px-10 py-2 rounded-md font-Kanit"
-              disabled={!validMatch}
             >
               Sign-up
             </button>
