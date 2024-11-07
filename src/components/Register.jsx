@@ -22,7 +22,8 @@ function Register() {
       });
 
       if (response.ok) {
-        navigate("/signin");
+        // Redirect to the OTP verification page after successful registration
+        navigate("/verify-otp");
       } else {
         setErrMsg("Registration error. Please try again.");
       }
