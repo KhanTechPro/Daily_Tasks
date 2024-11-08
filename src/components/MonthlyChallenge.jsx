@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TaskList from './TaskList';
+
 
 function MonthlyChallenge() {
     const months = [
@@ -63,7 +63,6 @@ function MonthlyChallenge() {
                     &gt;
                 </button>
             </div>
-            <TaskList />
         </div>
     );
 }

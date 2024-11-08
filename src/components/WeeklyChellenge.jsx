@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import TaskList from './TaskList';
 
 const getWeekDays = (startDate) => {
   const days = [];
@@ -81,7 +80,7 @@ function WeeklyChallenge() {
 
       {/* Task List */}
       <div className="mt-4">
-        <TaskList />
+   
       </div>
     </div>
   );
