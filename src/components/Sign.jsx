@@ -21,7 +21,7 @@ const Sign = () => {
       });
 
       if (response.ok) {
-        navigate("/dailyChallange"); // Redirect on successful login
+        navigate("/tasks"); // Redirect on successful login
       } else {
         const data = await response.json();
         setErrMsg(
