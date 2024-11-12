@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserContext"; // Import the UserContext
 import Header from "./Header";
 
 const Sign = () => {
@@ -7,6 +8,7 @@ const Sign = () => {
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useUser(); // Get setUser from context
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +23,8 @@ const Sign = () => {
       });
 
       if (response.ok) {
+        const userData = await response.json(); // Assuming the response contains user info
+        setUser(userData); // Set user data in context
         navigate("/tasks"); // Redirect on successful login
       } else {
         const data = await response.json();
@@ -40,7 +44,6 @@ const Sign = () => {
   return (
     <>
       <Header />
-
       <div className="max-w-[1024px] md:w-[550px] md:h-[320px] mx-auto relative md:top-[100px] p-10 m-6 border-2 rounded-md">
         <h2 className="md:text-3xl font-regular">Sign up</h2>
         <p className="py-2">Nice to meet you! Enter your email to login.</p>
