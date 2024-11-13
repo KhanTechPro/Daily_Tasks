@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../UserContext"; // Import the UserContext
+import { useUser } from "./UserContext"; // Import the UserContext
 import Header from "./Header";
 
 const Sign = () => {

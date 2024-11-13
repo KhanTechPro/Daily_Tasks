@@ -4,7 +4,7 @@ import DailyChellenge from "./DailyChellenge";
 import WeeklyChellenge from "./WeeklyChellenge";
 import MonthlyChallenge from "./MonthlyChallenge";
 import TaskManager from "./TaskManager";
-import { useUser } from "../UserContext";
+import { useUser } from "./UserContext";
 
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +29,11 @@ const Navbar = () => {
           </h1>
         </div>
         <div>
-          <img src="/user-icon.png" alt="User Icon" className="w-10 h-10 rounded-full border-2 border-[#5200ff]" />
+          <img
+            src="/user-icon.png"
+            alt="User Icon"
+            className="w-10 h-10 rounded-full border-2 border-[#5200ff]"
+          />
         </div>
       </div>
 
@@ -45,8 +49,12 @@ const Navbar = () => {
                 className="w-20 h-20 rounded-md border-2 border-[#5200ff]"
               />
               <div className="ml-4">
-                <h2 className="text-lg font-semibold">{user?.username || "Guest"}</h2>
-                <p className="text-gray-500">{user?.email || "Please sign in"}</p>
+                <h2 className="text-lg font-semibold">
+                  {user?.username || "Guest"}
+                </h2>
+                <p className="text-gray-500">
+                  {user?.email || "Please sign in"}
+                </p>
               </div>
             </div>
             <nav className="flex flex-col text-xl cursor-pointer divide-y divide-[#5200ff]">
