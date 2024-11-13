@@ -23,8 +23,9 @@ const Sign = () => {
       });
 
       if (response.ok) {
-        const userData = await response.json(); // Assuming the response contains user info
+        const userData = await response.json(); // Fetch user data
         setUser(userData); // Set user data in context
+        localStorage.setItem("authToken", userData.token); // Store token
         navigate("/tasks"); // Redirect on successful login
       } else {
         const data = await response.json();
