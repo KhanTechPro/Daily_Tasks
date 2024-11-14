@@ -9,12 +9,10 @@ import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import { UserProvider } from "./components/UserContext";
 
-
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check if the user is authenticated (e.g., token present in localStorage)
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, []);
@@ -23,7 +21,10 @@ function App() {
     <>
       <Navbar username="John Doe" email="johndoe@example.com" />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/"
+          element={isAuthenticated ? <HomePage /> : <Navigate to="/sign" />}
+        />
         <Route path="register" element={<Register />} />
         <Route path="verify-otp" element={<VerifyOtp />} />
         <Route path="sign" element={<Sign />} />
