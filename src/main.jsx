@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "../index.css";
 import { UserProvider } from "./components/UserContext";
-// Import UserProvider here
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
@@ -14,7 +13,6 @@ root.render(
     <BrowserRouter>
       <UserProvider>
         {" "}
-        {/* Wrap App with UserProvider */}
         <App />
       </UserProvider>
     </BrowserRouter>

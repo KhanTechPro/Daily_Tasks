@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
-import HomePage from "./components/HomePage";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Register from "./components/Register";
 import VerifyOtp from "./components/VerifyOtp";
 import Sign from "./components/Sign";
-import UserProfileToday from "./components/UserProfileToday";
 import Navbar from "./components/Navbar";
-import PrivateRoute from "./components/PrivateRoute";
-import { Navigate } from "react-router-dom";
 import { UserProvider } from "./components/UserContext";
+import DailyChellenge from "./components/DailyChellenge";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,21 +19,19 @@ function App() {
     <UserProvider>
       <Navbar username="John Doe" email="johndoe@example.com" />
       <Routes>
-        {/* Redirect to /sign if not authenticated, otherwise to /daily */}
         <Route
           path="/"
           element={
-            isAuthenticated ? <Navigate to="/daily" /> : <Navigate to="/sign" />
+            isAuthenticated ? <Navigate to="/daily" /> : <Navigate to="/Sign" />
           }
         />
 
         <Route path="/sign" element={<Sign />} />
 
-        {/* Only allow access to /daily if authenticated */}
         <Route
           path="/daily"
           element={
-            isAuthenticated ? <DailyChallenge /> : <Navigate to="/sign" />
+            isAuthenticated ? <DailyChellenge /> : <Navigate to="/Sign" />
           }
         />
 
@@ -49,16 +44,6 @@ function App() {
         <Route
           path="/add-special-day"
           element={<div>Add Special Day Page</div>}
-        />
-
-        {/* Protected route example for UserProfileToday */}
-        <Route
-          path="/UserProfileToday"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <UserProfileToday />
-            </PrivateRoute>
-          }
         />
       </Routes>
     </UserProvider>
