@@ -24,7 +24,9 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={isAuthenticated ? <HomePage /> : <Navigate to="/sign" />}
+          element={
+            isAuthenticated ? <Navigate to="/daily" /> : <Navigate to="/sign" />
+          }
         />
 
         <Route path="register" element={<Register />} />
