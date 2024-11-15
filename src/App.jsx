@@ -24,9 +24,12 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            isAuthenticated ? <Navigate to="/daily" /> : <Navigate to="/sign" />
-          }
+          element={user ? <Navigate to="/daily" /> : <Navigate to="/Sign" />}
+        />
+        <Route path="/sign" element={<Sign />} />
+        <Route
+          path="/daily"
+          element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
         />
 
         <Route path="register" element={<Register />} />

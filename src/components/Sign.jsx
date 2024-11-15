@@ -17,7 +17,6 @@ const Sign = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
         body: JSON.stringify({ email, password }),
       });
@@ -26,7 +25,7 @@ const Sign = () => {
         const userData = await response.json(); // Fetch user data
         setUser(userData); // Set user data in context
         localStorage.setItem("authToken", userData.token); // Store token
-        navigate("/tasks"); // Redirect on successful login
+        navigate("/daily"); // Redirect on successful login
       } else {
         const data = await response.json();
         setErrMsg(
