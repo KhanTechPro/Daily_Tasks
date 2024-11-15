@@ -17,7 +17,7 @@ const Sign = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRFTOKEN": "your-csrf-token-here", // Replace with actual CSRF token if needed
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
         body: JSON.stringify({ email, password }),
       });
@@ -46,7 +46,7 @@ const Sign = () => {
     <>
       <Header />
       <div className="max-w-[1024px] md:w-[550px] md:h-[320px] mx-auto relative md:top-[100px] p-10 m-6 border-2 rounded-md">
-        <h2 className="md:text-3xl font-regular">Sign up</h2>
+        <h2 className="md:text-3xl font-regular">Sign in</h2>
         <p className="py-2">Nice to meet you! Enter your email to login.</p>
         {errMsg && <p className="text-red-500">{errMsg}</p>}
         <form onSubmit={handleSubmit} className="flex flex-col relative top-4">
