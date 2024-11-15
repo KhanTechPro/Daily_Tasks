@@ -7,6 +7,7 @@ import Sign from "./components/Sign";
 import UserProfileToday from "./components/UserProfileToday";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
+import { Navigate } from "react-router-dom";
 import { UserProvider } from "./components/UserContext";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           path="/"
           element={isAuthenticated ? <HomePage /> : <Navigate to="/sign" />}
         />
+
         <Route path="register" element={<Register />} />
         <Route path="verify-otp" element={<VerifyOtp />} />
         <Route path="sign" element={<Sign />} />
