@@ -19,30 +19,41 @@ function App() {
   }, []);
 
   return (
-    <>
+    <UserProvider>
       <Navbar username="John Doe" email="johndoe@example.com" />
       <Routes>
+        {/* Redirect to /sign if not authenticated, otherwise to /daily */}
         <Route
           path="/"
-          element={user ? <Navigate to="/daily" /> : <Navigate to="/Sign" />}
+          element={
+            isAuthenticated ? <Navigate to="/daily" /> : <Navigate to="/sign" />
+          }
         />
+
         <Route path="/sign" element={<Sign />} />
+
+        {/* Only allow access to /daily if authenticated */}
         <Route
           path="/daily"
-          element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
+          element={
+            isAuthenticated ? <DailyChallenge /> : <Navigate to="/sign" />
+          }
         />
 
-        <Route path="register" element={<Register />} />
-        <Route path="verify-otp" element={<VerifyOtp />} />
-        <Route path="sign" element={<Sign />} />
-        <Route path="user-context" element={<UserProvider />} />
-        <Route path="/daily" element={<div />} />
-        <Route path="/weekly" element={<div />} />
-        <Route path="/monthly" element={<div />} />
-        <Route path="/add-special-day" element={<div />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/user-context" element={<UserProvider />} />
 
+        <Route path="/weekly" element={<div>Weekly Page</div>} />
+        <Route path="/monthly" element={<div>Monthly Page</div>} />
         <Route
-          path="UserProfileToday"
+          path="/add-special-day"
+          element={<div>Add Special Day Page</div>}
+        />
+
+        {/* Protected route example for UserProfileToday */}
+        <Route
+          path="/UserProfileToday"
           element={
             <PrivateRoute isAuthenticated={isAuthenticated}>
               <UserProfileToday />
@@ -50,7 +61,7 @@ function App() {
           }
         />
       </Routes>
-    </>
+    </UserProvider>
   );
 }
 
