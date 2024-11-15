@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./UserContext"; // Import the UserContext
 import Header from "./Header";
@@ -10,8 +10,19 @@ const Sign = () => {
   const navigate = useNavigate();
   const { setUser } = useUser(); // Get setUser from context
 
+  // Reset error message when email or password changes
+  useEffect(() => {
+    setErrMsg("");
+  }, [email, password]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setErrMsg("Please fill in both email and password.");
+      return;
+    }
+
     try {
       const response = await fetch("/api/accounts/signin/", {
         method: "POST",

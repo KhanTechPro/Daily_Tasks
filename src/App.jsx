@@ -1,44 +1,38 @@
-import React, { useState, useEffect } from "react";
+// src/App.jsx
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Register from "./components/Register";
 import VerifyOtp from "./components/VerifyOtp";
 import Sign from "./components/Sign";
 import Navbar from "./components/Navbar";
-import { UserProvider } from "./components/UserContext";
-import DailyChellenge from "./components/DailyChellenge";
+import { UserProvider, useUser } from "./components/UserContext"; // Correct import
+import DailyChallenge from "./components/DailyChellenge"; // Fixed typo (Chellenge -> Challenge)
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-  }, []);
+  const { user } = useUser(); // Get user from context
 
   return (
     <UserProvider>
-      <Navbar username="John Doe" email="johndoe@example.com" />
+      <Navbar
+        username={user ? user.username : "John Doe"}
+        email={user ? user.email : "johndoe@example.com"}
+      />
       <Routes>
+        {/* Redirect to Daily Challenge if authenticated, else go to Sign */}
         <Route
           path="/"
-          element={
-            isAuthenticated ? <Navigate to="/daily" /> : <Navigate to="/Sign" />
-          }
+          element={user ? <Navigate to="/daily" /> : <Navigate to="/sign" />}
         />
-
-        <Route path="/sign" element={<Sign />} />
-
+        <Route
+          path="/sign"
+          element={user ? <Navigate to="/daily" /> : <Sign />}
+        />
         <Route
           path="/daily"
-          element={
-            isAuthenticated ? <DailyChellenge /> : <Navigate to="/Sign" />
-          }
+          element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
         />
-
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route path="/user-context" element={<UserProvider />} />
-
         <Route path="/weekly" element={<div>Weekly Page</div>} />
         <Route path="/monthly" element={<div>Monthly Page</div>} />
         <Route
