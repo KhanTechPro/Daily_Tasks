@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 // Replace ACCESS_TOKEN with your actual token
-const ACCESS_TOKEN = 'your_access_token_here';
+const ACCESS_TOKEN = "your_access_token_here";
 
 function ToDoList() {
   const [tasks, setTasks] = useState({ todo: [], inProcess: [], done: [] });
-  const [newTask, setNewTask] = useState('');
+  const [newTask, setNewTask] = useState("");
 
   // Fetch tasks on load
   useEffect(() => {
@@ -15,11 +15,11 @@ function ToDoList() {
   // Fetch all tasks
   const fetchTasks = async () => {
     try {
-      const response = await fetch('https://todoapi.pythonanywhere.com/api/special-tasks/', {
-        method: 'GET',
+      const response = await fetch("/api/special-tasks/", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
       });
       if (response.ok) {
@@ -28,17 +28,18 @@ function ToDoList() {
 
         // Organize tasks based on status
         data.forEach((task) => {
-          if (task.status === 'To Do') organizedTasks.todo.push(task);
-          else if (task.status === 'In Process') organizedTasks.inProcess.push(task);
-          else if (task.status === 'Done') organizedTasks.done.push(task);
+          if (task.status === "To Do") organizedTasks.todo.push(task);
+          else if (task.status === "In Process")
+            organizedTasks.inProcess.push(task);
+          else if (task.status === "Done") organizedTasks.done.push(task);
         });
 
         setTasks(organizedTasks);
       } else {
-        console.error('Failed to fetch tasks.');
+        console.error("Failed to fetch tasks.");
       }
     } catch (error) {
-      console.error('Error fetching tasks:', error);
+      console.error("Error fetching tasks:", error);
     }
   };
 
@@ -46,22 +47,22 @@ function ToDoList() {
   const addTask = async () => {
     if (newTask.trim()) {
       try {
-        const response = await fetch('https://todoapi.pythonanywhere.com/api/special-tasks/', {
-          method: 'POST',
+        const response = await fetch("/api/special-tasks/", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${ACCESS_TOKEN}`,
           },
-          body: JSON.stringify({ title: newTask, status: 'To Do' }),
+          body: JSON.stringify({ title: newTask, status: "To Do" }),
         });
         if (response.ok) {
-          setNewTask('');
+          setNewTask("");
           fetchTasks(); // Refresh tasks
         } else {
-          console.error('Failed to add task.');
+          console.error("Failed to add task.");
         }
       } catch (error) {
-        console.error('Error adding task:', error);
+        console.error("Error adding task:", error);
       }
     }
   };
@@ -69,40 +70,40 @@ function ToDoList() {
   // Update task status
   const updateTaskStatus = async (task, newStatus) => {
     try {
-      const response = await fetch(`https://todoapi.pythonanywhere.com/api/special-tasks-id/${task.id}/`, {
-        method: 'PUT',
+      const response = await fetch(`/api/special-tasks-id/${task.id}/`, {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
         body: JSON.stringify({ title: task.title, status: newStatus }),
       });
       if (response.ok) {
         fetchTasks(); // Refresh tasks after updating
       } else {
-        console.error('Failed to update task status.');
+        console.error("Failed to update task status.");
       }
     } catch (error) {
-      console.error('Error updating task status:', error);
+      console.error("Error updating task status:", error);
     }
   };
 
   // Delete a task
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`https://todoapi.pythonanywhere.com/api/special-tasks-id/${taskId}/`, {
-        method: 'DELETE',
+      const response = await fetch(`/api/special-tasks-id/${taskId}/`, {
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${ACCESS_TOKEN}`,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
       });
       if (response.ok) {
         fetchTasks(); // Refresh tasks after deletion
       } else {
-        console.error('Failed to delete task.');
+        console.error("Failed to delete task.");
       }
     } catch (error) {
-      console.error('Error deleting task:', error);
+      console.error("Error deleting task:", error);
     }
   };
 
@@ -119,25 +120,25 @@ function ToDoList() {
             &#x22EE; {/* Three dots */}
           </button>
           <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-10 hidden group-hover:block">
-            {status !== 'To Do' && (
+            {status !== "To Do" && (
               <button
-                onClick={() => updateTaskStatus(task, 'To Do')}
+                onClick={() => updateTaskStatus(task, "To Do")}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
               >
                 Move to To Do
               </button>
             )}
-            {status !== 'In Process' && (
+            {status !== "In Process" && (
               <button
-                onClick={() => updateTaskStatus(task, 'In Process')}
+                onClick={() => updateTaskStatus(task, "In Process")}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
               >
                 Move to In Process
               </button>
             )}
-            {status !== 'Done' && (
+            {status !== "Done" && (
               <button
-                onClick={() => updateTaskStatus(task, 'Done')}
+                onClick={() => updateTaskStatus(task, "Done")}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
               >
                 Move to Done
@@ -177,19 +178,21 @@ function ToDoList() {
               Add Task
             </button>
           </div>
-          {renderTasks(tasks.todo, 'To Do')}
+          {renderTasks(tasks.todo, "To Do")}
         </div>
 
         {/* In Process List */}
         <div className="flex-1 bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">In Process</h2>
-          {renderTasks(tasks.inProcess, 'In Process')}
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            In Process
+          </h2>
+          {renderTasks(tasks.inProcess, "In Process")}
         </div>
 
         {/* Done List */}
         <div className="flex-1 bg-white p-4 rounded-lg shadow">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Done</h2>
-          {renderTasks(tasks.done, 'Done')}
+          {renderTasks(tasks.done, "Done")}
         </div>
       </div>
     </div>
