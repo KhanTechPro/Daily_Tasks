@@ -17,7 +17,7 @@ function ToDoList() {
    */
   const fetchTasks = async () => {
     try {
-      const response = await fetch("/special-tasks/", {
+      const response = await fetch("/api/special-tasks/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function ToDoList() {
   const addTask = async () => {
     if (newTask.trim()) {
       try {
-        const response = await fetch("/special-tasks/", {
+        const response = await fetch("/api/special-tasks/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +80,7 @@ function ToDoList() {
    */
   const updateTaskStatus = async (task, newStatus) => {
     try {
-      const response = await fetch(`/special-tasks-id/${task.id}/`, {
+      const response = await fetch(`/api/special-tasks-id/${task.id}/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ function ToDoList() {
    */
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`/special-tasks-id/${taskId}/`, {
+      const response = await fetch(`/api/special-tasks-id/${taskId}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${ACCESS_TOKEN}`,
