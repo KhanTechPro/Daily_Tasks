@@ -4,6 +4,9 @@ import { UserProvider, useUser } from "./components/UserContext";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Sign from "./components/Sign";
+import DailyChallenge from "./components/DailyChellenge";
+import WeeklyChallenge from "./components/WeeklyChellenge";
+import MonthlyChallenge from "./components/MonthlyChallenge";
 
 function App() {
   return (
