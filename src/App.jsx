@@ -30,22 +30,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/hero" element={<Hero />} />
         <Route path="/sign" element={<PublicRoute element={<Sign />} />} />
-        <Route
-          path="/daily"
-          element={<PrivateRoute element={<DailyChallenge />} />}
-        />
-        <Route
-          path="/weekly"
-          element={<PrivateRoute element={<WeeklyChallenge />} />}
-        />
-        <Route
-          path="/monthly"
-          element={<PrivateRoute element={<MonthlyChallenge />} />}
-        />
-        <Route
-          path="/add-special-day"
-          element={<PrivateRoute element={<TaskManager />} />}
-        />
+
         {/* Default route: Redirect based on user login status */}
         <Route
           path="/"
