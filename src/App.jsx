@@ -32,6 +32,8 @@ function App() {
           element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
         />
         <Route path="/register" element={<Register />} />
+        <Route path="/daily" element={<DailyChallenge />} />
+
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/weekly" element={<div>Weekly Page</div>} />
         <Route path="/monthly" element={<div>Monthly Page</div>} />
