@@ -6,25 +6,24 @@ import Register from "./components/Register";
 import VerifyOtp from "./components/VerifyOtp";
 import Sign from "./components/Sign";
 import Navbar from "./components/Navbar";
-import { UserProvider, useUser } from "./components/UserContext"; // Correct import
-import DailyChallenge from "./components/DailyChellenge"; // Fixed typo (Chellenge -> Challenge)
+import { UserProvider, useUser } from "./components/UserContext";
+import DailyChallenge from "./components/DailyChellenge";
 
 function App() {
   const { user } = useUser(); // Get user from context
 
   return (
     <UserProvider>
-      <Route index path="/hero" element={<Hero />} />
       <Navbar
         username={user ? user.username : "John Doe"}
         email={user ? user.email : "johndoe@example.com"}
       />
       <Routes>
-        {/* Redirect to Daily Challenge if authenticated, else go to Sign */}
-        <Route
-          path="/"
-          element={user ? <Navigate to="/daily" /> : <Navigate to="/sign" />}
-        />
+        {/* Default to /hero if no specific route is provided */}
+        <Route path="/" element={<Navigate to="/hero" />} />
+        <Route path="/hero" element={<Hero />} />
+
+        {/* Authentication-based redirection */}
         <Route
           path="/sign"
           element={user ? <Navigate to="/daily" /> : <Sign />}
@@ -33,9 +32,9 @@ function App() {
           path="/daily"
           element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
         />
-        <Route path="/register" element={<Register />} />
-        <Route path="/daily" element={<DailyChallenge />} />
 
+        {/* Other routes */}
+        <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/weekly" element={<div>Weekly Page</div>} />
         <Route path="/monthly" element={<div>Monthly Page</div>} />
