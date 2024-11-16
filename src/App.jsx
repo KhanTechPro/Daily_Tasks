@@ -23,16 +23,6 @@ function App() {
         <Route path="/" element={<Navigate to="/hero" />} />
         <Route path="/hero" element={<Hero />} />
 
-        {/* Authentication-based redirection */}
-        <Route
-          path="/sign"
-          element={user ? <Navigate to="/daily" /> : <Sign />}
-        />
-        <Route
-          path="/daily"
-          element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
-        />
-
         {/* Other routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
