@@ -1,6 +1,7 @@
 // src/App.jsx
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import Hero from "./components/Hero";
 import Register from "./components/Register";
 import VerifyOtp from "./components/VerifyOtp";
 import Sign from "./components/Sign";
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <UserProvider>
+      <Route index path="/hero" element={<Hero />} />
       <Navbar
         username={user ? user.username : "John Doe"}
         email={user ? user.email : "johndoe@example.com"}
@@ -28,7 +30,6 @@ function App() {
           element={user ? <Navigate to="/daily" /> : <Sign />}
         />
         <Route
-          index
           path="/daily"
           element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
         />
