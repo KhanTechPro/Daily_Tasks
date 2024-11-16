@@ -28,6 +28,7 @@ function App() {
           element={user ? <Navigate to="/daily" /> : <Sign />}
         />
         <Route
+          index
           path="/daily"
           element={user ? <DailyChallenge /> : <Navigate to="/sign" />}
         />
