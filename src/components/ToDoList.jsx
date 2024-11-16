@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from "react";
 
-// Replace ACCESS_TOKEN with your actual token
+// Replace ACCESS_TOKEN with your actual JWT token
 const ACCESS_TOKEN = "your_access_token_here";
 
 function ToDoList() {
   const [tasks, setTasks] = useState({ todo: [], inProcess: [], done: [] });
   const [newTask, setNewTask] = useState("");
 
-  // Fetch tasks on load
+  // Fetch all tasks on component mount
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // Fetch all tasks
+  /**
+   * Fetch all tasks from the API and organize them by status
+   */
   const fetchTasks = async () => {
     try {
-      const response = await fetch("/api/special-tasks/", {
+      const response = await fetch("/special-tasks/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
       });
+
       if (response.ok) {
         const data = await response.json();
         const organizedTasks = { todo: [], inProcess: [], done: [] };
 
-        // Organize tasks based on status
+        // Organize tasks based on their status
         data.forEach((task) => {
           if (task.status === "To Do") organizedTasks.todo.push(task);
           else if (task.status === "In Process")
@@ -43,11 +46,13 @@ function ToDoList() {
     }
   };
 
-  // Add a new task to "To Do"
+  /**
+   * Add a new task to the "To Do" list
+   */
   const addTask = async () => {
     if (newTask.trim()) {
       try {
-        const response = await fetch("/api/special-tasks/", {
+        const response = await fetch("/special-tasks/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -55,9 +60,10 @@ function ToDoList() {
           },
           body: JSON.stringify({ title: newTask, status: "To Do" }),
         });
-        if (response.ok) {
+
+        if (response.status === 201) {
           setNewTask("");
-          fetchTasks(); // Refresh tasks
+          fetchTasks(); // Refresh the task list
         } else {
           console.error("Failed to add task.");
         }
@@ -67,10 +73,14 @@ function ToDoList() {
     }
   };
 
-  // Update task status
+  /**
+   * Update the status of a task
+   * @param {Object} task - The task object
+   * @param {string} newStatus - The new status ("To Do", "In Process", "Done")
+   */
   const updateTaskStatus = async (task, newStatus) => {
     try {
-      const response = await fetch(`/api/special-tasks-id/${task.id}/`, {
+      const response = await fetch(`/special-tasks-id/${task.id}/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -78,8 +88,9 @@ function ToDoList() {
         },
         body: JSON.stringify({ title: task.title, status: newStatus }),
       });
+
       if (response.ok) {
-        fetchTasks(); // Refresh tasks after updating
+        fetchTasks(); // Refresh the task list
       } else {
         console.error("Failed to update task status.");
       }
@@ -88,17 +99,21 @@ function ToDoList() {
     }
   };
 
-  // Delete a task
+  /**
+   * Delete a task
+   * @param {string} taskId - The ID of the task to delete
+   */
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`/api/special-tasks-id/${taskId}/`, {
+      const response = await fetch(`/special-tasks-id/${taskId}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
       });
-      if (response.ok) {
-        fetchTasks(); // Refresh tasks after deletion
+
+      if (response.status === 204) {
+        fetchTasks(); // Refresh the task list
       } else {
         console.error("Failed to delete task.");
       }
@@ -107,50 +122,47 @@ function ToDoList() {
     }
   };
 
-  // Render tasks with options to move or delete
+  /**
+   * Render tasks with options to move or delete
+   */
   const renderTasks = (tasks, status) =>
     tasks.map((task) => (
       <div
         key={task.id}
-        className="flex justify-between items-center p-2 border-b border-gray-300 relative"
+        className="flex justify-between items-center p-2 border-b border-gray-300"
       >
         <span>{task.title}</span>
-        <div className="relative">
-          <button className="text-gray-500 hover:text-gray-700">
-            &#x22EE; {/* Three dots */}
-          </button>
-          <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-10 hidden group-hover:block">
-            {status !== "To Do" && (
-              <button
-                onClick={() => updateTaskStatus(task, "To Do")}
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-              >
-                Move to To Do
-              </button>
-            )}
-            {status !== "In Process" && (
-              <button
-                onClick={() => updateTaskStatus(task, "In Process")}
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-              >
-                Move to In Process
-              </button>
-            )}
-            {status !== "Done" && (
-              <button
-                onClick={() => updateTaskStatus(task, "Done")}
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-              >
-                Move to Done
-              </button>
-            )}
+        <div className="flex space-x-2">
+          {status !== "To Do" && (
             <button
-              onClick={() => deleteTask(task.id)}
-              className="block px-4 py-2 text-red-500 hover:bg-gray-100 w-full text-left"
+              onClick={() => updateTaskStatus(task, "To Do")}
+              className="text-sm text-blue-500 hover:underline"
             >
-              Delete
+              Move to To Do
             </button>
-          </div>
+          )}
+          {status !== "In Process" && (
+            <button
+              onClick={() => updateTaskStatus(task, "In Process")}
+              className="text-sm text-blue-500 hover:underline"
+            >
+              Move to In Process
+            </button>
+          )}
+          {status !== "Done" && (
+            <button
+              onClick={() => updateTaskStatus(task, "Done")}
+              className="text-sm text-blue-500 hover:underline"
+            >
+              Move to Done
+            </button>
+          )}
+          <button
+            onClick={() => deleteTask(task.id)}
+            className="text-sm text-red-500 hover:underline"
+          >
+            Delete
+          </button>
         </div>
       </div>
     ));
@@ -159,7 +171,7 @@ function ToDoList() {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <h1 className="text-2xl font-bold text-[#5200ff] mb-6">To-Do List</h1>
 
-      <div className="flex space-x-4 w-full max-w-3xl">
+      <div className="flex space-x-4 w-full max-w-5xl">
         {/* To Do List */}
         <div className="flex-1 bg-white p-4 rounded-lg shadow">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">To Do</h2>
