@@ -7,6 +7,7 @@ import Sign from "./components/Sign";
 import DailyChallenge from "./components/DailyChellenge";
 import WeeklyChallenge from "./components/WeeklyChellenge";
 import MonthlyChallenge from "./components/MonthlyChallenge";
+import TaskManager from "./components/TaskManager";
 
 function App() {
   return (
