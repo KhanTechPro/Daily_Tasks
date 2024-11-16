@@ -49,7 +49,7 @@ const AppContent = () => {
         {/* Default route: Redirect based on user login status */}
         <Route
           path="/"
-          element={<Navigate to={user ? "/daily" : "/sign"} replace />}
+          element={<Navigate to={user ? "/navbar" : "/sign"} replace />}
         />
       </Routes>
     </>
@@ -65,7 +65,7 @@ const PrivateRoute = ({ element }) => {
 // PublicRoute: Prevents logged-in users from accessing public pages
 const PublicRoute = ({ element }) => {
   const { user } = useUser();
-  return user ? <Navigate to="/daily" /> : element;
+  return user ? <Navigate to="/navbar" /> : element;
 };
 
 export default App;
