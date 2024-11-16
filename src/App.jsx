@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Sign from "./components/Sign";
 import DailyChallenge from "./components/DailyChellenge";
+import ToDoList from "./components/ToDoList";
 
 function App() {
   return (
@@ -16,8 +17,8 @@ function App() {
         <Route path="/" element={<Navigate to="/sign" />} />
         <Route path="/sign" element={<PublicRoute element={<Sign />} />} />
         <Route
-          path="/daily"
-          element={<PrivateRoute element={<DailyChallenge />} />}
+          path="/toDoList"
+          element={<PrivateRoute element={<ToDoList />} />}
         />
       </Routes>
     </UserProvider>
@@ -43,7 +44,7 @@ const PrivateRoute = ({ element }) => {
 // PublicRoute: Prevents logged-in users from accessing public pages
 const PublicRoute = ({ element }) => {
   const { user } = useUser();
-  return user ? <Navigate to="/daily" /> : element;
+  return user ? <Navigate to="/toDoList" /> : element;
 };
 
 export default App;
