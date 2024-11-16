@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // Replace ACCESS_TOKEN with your actual JWT token
-const ACCESS_TOKEN = "your_access_token_here";
+const ACCESS_TOKEN = "_Bearer_JWT_";
 
 function ToDoList() {
   const [tasks, setTasks] = useState({ todo: [], inProcess: [], done: [] });
