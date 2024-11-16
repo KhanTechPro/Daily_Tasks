@@ -6,18 +6,15 @@ import Register from "./components/Register";
 import VerifyOtp from "./components/VerifyOtp";
 import Sign from "./components/Sign";
 import Navbar from "./components/Navbar";
-import { UserProvider, useUser } from "./components/UserContext";
+import { UserProvider } from "./components/UserContext"; // Import UserProvider
 import DailyChallenge from "./components/DailyChellenge";
 
 function App() {
-  const { user } = useUser(); // Get user from context
-
   return (
     <UserProvider>
-      <Navbar
-        username={user ? user.username : "John Doe"}
-        email={user ? user.email : "johndoe@example.com"}
-      />
+      {" "}
+      {/* Ensure UserProvider wraps the whole application */}
+      <Navbar />
       <Routes>
         {/* Default to /hero if no specific route is provided */}
         <Route path="/" element={<Navigate to="/hero" />} />
