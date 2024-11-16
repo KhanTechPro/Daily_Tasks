@@ -5,31 +5,29 @@ import Register from "./components/Register";
 import VerifyOtp from "./components/VerifyOtp";
 import Sign from "./components/Sign";
 import Navbar from "./components/Navbar";
-import { UserProvider, useUser } from "./components/UserContext"; // UserProvider and useUser
+import { UserProvider, useUser } from "./components/UserContext";
 import DailyChallenge from "./components/DailyChellenge";
 
 function App() {
   return (
-    // Wrap the entire app with UserProvider
     <UserProvider>
-      <NavbarWrapper /> {/* Navbar depends on user */}
+      <NavbarWrapper />
       <Routes>
         {/* Default route to /hero */}
         <Route path="/" element={<Navigate to="/hero" />} />
         <Route path="/hero" element={<Hero />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/sign" element={<PublicRoute element={<Sign />} />} />
         <Route
           path="/daily"
           element={<PrivateRoute element={<DailyChallenge />} />}
         />
-        <Route path="/sign" element={<PublicRoute element={<Sign />} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
       </Routes>
     </UserProvider>
   );
 }
 
-// Wrap Navbar with useUser to handle user info
 const NavbarWrapper = () => {
   const { user } = useUser();
   return (
@@ -40,13 +38,13 @@ const NavbarWrapper = () => {
   );
 };
 
-// Helper Component: For private routes (only for logged-in users)
+// PrivateRoute: For pages only accessible to logged-in users
 const PrivateRoute = ({ element }) => {
   const { user } = useUser();
   return user ? element : <Navigate to="/sign" />;
 };
 
-// Helper Component: For public routes (redirect if logged in)
+// PublicRoute: Redirect logged-in users away from public pages
 const PublicRoute = ({ element }) => {
   const { user } = useUser();
   return user ? <Navigate to="/daily" /> : element;
