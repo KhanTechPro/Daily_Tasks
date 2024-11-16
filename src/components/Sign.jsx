@@ -33,10 +33,11 @@ const Sign = () => {
       });
 
       if (response.ok) {
-        const userData = await response.json(); // Fetch user data
-        setUser(userData); // Set user data in context
-        localStorage.setItem("authToken", userData.token); // Store token
-        navigate("/daily"); // Redirect on successful login
+        const userData = await response.json();
+        console.log("User Data:", userData); // Debugging
+        setUser(userData);
+        localStorage.setItem("authToken", userData.token);
+        navigate("/daily");
       } else {
         const data = await response.json();
         setErrMsg(
