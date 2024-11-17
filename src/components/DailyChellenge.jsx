@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import toDoList from "./ToDoList";
+import ToDoList from "./ToDoList";
 
 function DailyChellenge() {
   const today = new Date();
@@ -32,7 +32,7 @@ function DailyChellenge() {
       </div>
 
       {/* Task List */}
-      <toDoList date={formattedDate} />
+      <ToDoList date={formattedDate} />
     </div>
   );
 }
