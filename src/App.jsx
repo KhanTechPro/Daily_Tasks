@@ -20,6 +20,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/sign" element={<Sign />} />
+        <Route path="/navbar" element={<Navbar />} />
         <Route path="/daily" element={<DailyChellenge />} />
         <Route path="/weekly" element={<WeeklyChellenge />} />
         <Route path="/monthly" element={<MonthlyChallenge />} />
