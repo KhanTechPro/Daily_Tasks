@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-const TaskManager = () => {
-  const [tasks, setTasks] = useState([]); // List of tasks
-  const [newTask, setNewTask] = useState(""); // New task input
-  const [accessToken, setAccessToken] = useState("_Bearer_JWT_");
+const BASE_URL = "https://todoapi.pythonanywhere.com/api";
 
-  // Fetch existing tasks on component mount
+const TaskManager = () => {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState("");
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("jwtToken") || ""
+  );
+
+  // Fetch tasks on mount
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -13,12 +17,14 @@ const TaskManager = () => {
   // Fetch tasks from API
   const fetchTasks = async () => {
     try {
-      const response = await fetch("/tasks/", {
+      const response = await fetch(`${BASE_URL}/tasks/`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       if (response.ok) {
         const data = await response.json();
         setTasks(data);
+      } else if (response.status === 401) {
+        console.error("Unauthorized. Please check your access token.");
       } else {
         console.error("Failed to fetch tasks");
       }
@@ -34,7 +40,7 @@ const TaskManager = () => {
       return;
     }
     try {
-      const response = await fetch("/tasks/", {
+      const response = await fetch(`${BASE_URL}/tasks/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,8 +50,8 @@ const TaskManager = () => {
       });
       if (response.ok) {
         const task = await response.json();
-        setTasks([...tasks, task]); // Add the new task to the state
-        setNewTask(""); // Clear the input field
+        setTasks([...tasks, task]);
+        setNewTask("");
       } else {
         console.error("Failed to add task");
       }
@@ -57,7 +63,7 @@ const TaskManager = () => {
   // Update task status
   const updateStatus = async (taskId, newStatus) => {
     try {
-      const response = await fetch(`/tasks/${taskId}/`, {
+      const response = await fetch(`${BASE_URL}/tasks/${taskId}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +89,6 @@ const TaskManager = () => {
   return (
     <div>
       <h1>Task Manager</h1>
-      {/* Add Task */}
       <input
         type="text"
         value={newTask}
@@ -91,8 +96,6 @@ const TaskManager = () => {
         placeholder="Enter new task"
       />
       <button onClick={addTask}>Add Task</button>
-
-      {/* Task List */}
       <ul>
         {tasks.map((task) => (
           <li key={task.id}>
