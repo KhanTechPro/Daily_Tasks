@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, Routes, Route, Navigate } from "react-router-dom";
-import DailyChellenge from "./DailyChellenge";
-import WeeklyChellenge from "./WeeklyChellenge";
-import MonthlyChallenge from "./MonthlyChallenge";
-import TaskManager from "./TaskManager";
+import { NavLink } from "react-router-dom";
 import { useUser } from "./UserContext";
 
 const Navbar = () => {
@@ -37,9 +33,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Sidebar and Main Content */}
+      {/* Sidebar */}
       <div className="flex h-[calc(100vh-64px)] border-b border-[#5200ff]">
-        {/* Sidebar */}
         <div className="w-1/4 border border-[#5200ff] hidden md:block">
           <aside className="h-full">
             <div className="flex items-center p-4 border-b border-[#5200ff]">
@@ -94,17 +89,6 @@ const Navbar = () => {
             </nav>
           </aside>
         </div>
-
-        {/* Main Content */}
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Navigate to="/daily" replace />} />
-            <Route path="/daily" element={<DailyChellenge />} />
-            <Route path="/weekly" element={<WeeklyChellenge />} />
-            <Route path="/monthly" element={<MonthlyChallenge />} />
-            <Route path="/add-special-day" element={<TaskManager />} />
-          </Routes>
-        </main>
       </div>
     </div>
   );

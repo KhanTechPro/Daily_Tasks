@@ -1,52 +1,32 @@
 import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { UserProvider, useUser } from "./components/UserContext";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { UserProvider } from "./components/UserContext";
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
+import HomePage from "./components/HomePage";
+import Register from "./components/Register";
+import VerifyOtp from "./components/VerifyOtp";
 import Sign from "./components/Sign";
+import DailyChellenge from "./components/DailyChellenge";
+import WeeklyChellenge from "./components/WeeklyChellenge";
+import MonthlyChallenge from "./components/MonthlyChallenge";
+import TaskManager from "./components/TaskManager";
 
 function App() {
   return (
     <UserProvider>
-      <AppContent />
+      <Routes>
+        <Route path="/" element={<Navigate to="/homePage" replace />} />
+        <Route path="/homePage" element={<HomePage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/sign" element={<Sign />} />
+        <Route path="/daily" element={<DailyChellenge />} />
+        <Route path="/weekly" element={<WeeklyChellenge />} />
+        <Route path="/monthly" element={<MonthlyChallenge />} />
+        <Route path="/add-special-day" element={<TaskManager />} />
+      </Routes>
     </UserProvider>
   );
 }
-
-const AppContent = () => {
-  const { user } = useUser();
-  const location = useLocation();
-
-  // Only show the Navbar if the user is logged in and not on the /sign route
-  const showNavbar = user && location.pathname !== "/sign";
-
-  return (
-    <>
-      {showNavbar && <Navbar />}
-      <Routes>
-        <Route path="/hero" element={<Hero />} />
-        <Route path="/sign" element={<PublicRoute element={<Sign />} />} />
-
-        {/* Default route: Redirect based on user login status */}
-        <Route
-          path="/"
-          element={<Navigate to={user ? "/navbar" : "/sign"} replace />}
-        />
-      </Routes>
-    </>
-  );
-};
-
-// PrivateRoute: Protects private pages
-const PrivateRoute = ({ element }) => {
-  const { user } = useUser();
-  return user ? element : <Navigate to="/sign" />;
-};
-
-// PublicRoute: Prevents logged-in users from accessing public pages
-const PublicRoute = ({ element }) => {
-  const { user } = useUser();
-  return user ? <Navigate to="/navbar" /> : element;
-};
 
 export default App;

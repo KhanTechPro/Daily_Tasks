@@ -37,7 +37,7 @@ const Sign = () => {
         console.log("User Data:", userData); // Debugging
         setUser(userData);
         localStorage.setItem("authToken", userData.token);
-        navigate("/");
+        navigate("/navbar");
       } else {
         const data = await response.json();
         setErrMsg(

@@ -9,7 +9,7 @@ const Header = () => {
           <h1>🎯 Daily Tasks</h1>
         </Link>
         <Link
-          to={"./Sign"}
+          to={"/sign"}
           className="bg-black text-white px-8 py-1 rounded-md font-Kanit"
         >
           Sign-in
