@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 // Replace ACCESS_TOKEN with your actual JWT token
-const ACCESS_TOKEN = "_Bearer_JWT_";
+const ACCESS_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMyMzgwNjM3LCJpYXQiOjE3MzIyOTQyMzcsImp0aSI6IjY4MzU3YjIzZjlhNTRkOThhMDZlNzI0ZThiOGRiMzE5IiwidXNlcl9pZCI6Nn0.mHInOct-_rr_X9hTHdwlYCRCkKACmyHmYmdwAFgvsSE";
 
 function ToDoList() {
   const [tasks, setTasks] = useState({ todo: [], inProcess: [], done: [] });
