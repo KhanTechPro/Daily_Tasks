@@ -9,8 +9,6 @@ export default defineConfig({
   },
 
   build: {
-    rollupOptions: {
-      external: ["/axios"], // Exclude axios from the bundle
-    },
+    outDir: "dist", // Specify the output directory
   },
 });
