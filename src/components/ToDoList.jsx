@@ -1,73 +1,50 @@
 import React, { useState, useEffect } from "react";
-
-// Replace ACCESS_TOKEN with your actual JWT token
-const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMyMzgwNjM3LCJpYXQiOjE3MzIyOTQyMzcsImp0aSI6IjY4MzU3YjIzZjlhNTRkOThhMDZlNzI0ZThiOGRiMzE5IiwidXNlcl9pZCI6Nn0.mHInOct-_rr_X9hTHdwlYCRCkKACmyHmYmdwAFgvsSE";
+import {
+  getSpecialTasks,
+  createSpecialTask,
+  updateSpecialTask,
+  deleteSpecialTask,
+} from "./Api";
 
 function ToDoList() {
   const [tasks, setTasks] = useState({ todo: [], inProcess: [], done: [] });
   const [newTask, setNewTask] = useState("");
 
-  // Fetch all tasks on component mount
+  // Fetch tasks on component mount
   useEffect(() => {
     fetchTasks();
   }, []);
 
   /**
-   * Fetch all tasks from the API and organize them by status
+   * Fetch tasks using the API function and organize them
    */
   const fetchTasks = async () => {
     try {
-      const response = await fetch("/api/special-tasks/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-        },
+      const data = await getSpecialTasks();
+      const organizedTasks = { todo: [], inProcess: [], done: [] };
+
+      data.forEach((task) => {
+        if (task.status === "To Do") organizedTasks.todo.push(task);
+        else if (task.status === "In Process")
+          organizedTasks.inProcess.push(task);
+        else if (task.status === "Done") organizedTasks.done.push(task);
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const organizedTasks = { todo: [], inProcess: [], done: [] };
-
-        // Organize tasks based on their status
-        data.forEach((task) => {
-          if (task.status === "To Do") organizedTasks.todo.push(task);
-          else if (task.status === "In Process")
-            organizedTasks.inProcess.push(task);
-          else if (task.status === "Done") organizedTasks.done.push(task);
-        });
-
-        setTasks(organizedTasks);
-      } else {
-        console.error("Failed to fetch tasks.");
-      }
+      setTasks(organizedTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
   /**
-   * Add a new task to the "To Do" list
+   * Add a new task using the API function
    */
   const addTask = async () => {
     if (newTask.trim()) {
       try {
-        const response = await fetch("/api/special-tasks/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${ACCESS_TOKEN}`,
-          },
-          body: JSON.stringify({ title: newTask, status: "To Do" }),
-        });
-
-        if (response.status === 201) {
-          setNewTask("");
-          fetchTasks(); // Refresh the task list
-        } else {
-          console.error("Failed to add task.");
-        }
+        await createSpecialTask({ title: newTask, status: "To Do" });
+        setNewTask("");
+        fetchTasks(); // Refresh the task list
       } catch (error) {
         console.error("Error adding task:", error);
       }
@@ -75,56 +52,37 @@ function ToDoList() {
   };
 
   /**
-   * Update the status of a task
+   * Update task status using the API function
    * @param {Object} task - The task object
    * @param {string} newStatus - The new status ("To Do", "In Process", "Done")
    */
   const updateTaskStatus = async (task, newStatus) => {
     try {
-      const response = await fetch(`/api/special-tasks-id/${task.id}/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-        },
-        body: JSON.stringify({ title: task.title, status: newStatus }),
+      await updateSpecialTask(task.id, {
+        title: task.title,
+        status: newStatus,
       });
-
-      if (response.ok) {
-        fetchTasks(); // Refresh the task list
-      } else {
-        console.error("Failed to update task status.");
-      }
+      fetchTasks(); // Refresh the task list
     } catch (error) {
       console.error("Error updating task status:", error);
     }
   };
 
   /**
-   * Delete a task
+   * Delete a task using the API function
    * @param {string} taskId - The ID of the task to delete
    */
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`/api/special-tasks-id/${taskId}/`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-        },
-      });
-
-      if (response.status === 204) {
-        fetchTasks(); // Refresh the task list
-      } else {
-        console.error("Failed to delete task.");
-      }
+      await deleteSpecialTask(taskId);
+      fetchTasks(); // Refresh the task list
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
   /**
-   * Render tasks with options to move or delete
+   * Render tasks for a specific status
    */
   const renderTasks = (tasks, status) =>
     tasks.map((task) => (

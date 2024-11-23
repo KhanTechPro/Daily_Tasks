@@ -12,6 +12,7 @@ import MonthlyChallenge from "./components/MonthlyChallenge";
 import AddSpecialDayModal from "./components/AddSpecialDayModal";
 import TaskManager from "./components/TaskManager";
 import ToDoList from "./components/ToDoList";
+import Api from "./components/Api";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/sign" element={<Sign />} />
         <Route path="/navbar" element={<Navbar />} />
         <Route path="/toDoList" element={<ToDoList />} />
+        <Route path="/api" element={<Api />} />
         <Route path="/daily" element={<DailyChellenge />} />
         <Route path="/weekly" element={<WeeklyChellenge />} />
         <Route path="/monthly" element={<MonthlyChallenge />} />
