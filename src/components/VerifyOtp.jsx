@@ -21,7 +21,7 @@ function VerifyOTP() {
       });
 
       if (response.ok) {
-        navigate("/welcome"); // Redirect to a welcome or home page after verification
+        navigate("/sign"); // Redirect to a welcome or home page after verification
       } else {
         const data = await response.json();
         setErrMsg(
