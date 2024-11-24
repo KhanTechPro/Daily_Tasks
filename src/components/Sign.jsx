@@ -11,14 +11,13 @@ const Sign = () => {
   const navigate = useNavigate();
   const { setUser } = useUser(); // Access setUser from context
 
-  // Reset error message when input changes
   useEffect(() => {
     setErrMsg("");
   }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading spinner
+    setLoading(true);
 
     if (!email || !password) {
       setErrMsg("Please fill in both email and password.");
@@ -37,19 +36,20 @@ const Sign = () => {
 
       if (response.ok) {
         const userData = await response.json();
-        console.log("User Data:", userData); // Debugging
+        console.log("User Data:", userData);
 
-        // Save tokens in localStorage
-        localStorage.setItem("authToken", userData.access); // Access token
-        localStorage.setItem("refreshToken", userData.refresh); // Refresh token (if available)
+        if (userData.access) {
+          localStorage.setItem("authToken", userData.access);
+        }
+        if (userData.refresh) {
+          localStorage.setItem("refreshToken", userData.refresh);
+        }
 
-        // Set user context
         setUser({
-          email: userData.email, // Adjust based on API response
+          email: userData.email,
           token: userData.access,
         });
 
-        // Navigate to the next page
         navigate("/navbar");
       } else {
         const data = await response.json();
@@ -60,51 +60,42 @@ const Sign = () => {
     } catch (error) {
       setErrMsg("Network error! Please try again.");
     } finally {
-      setLoading(false); // Stop loading spinner
+      setLoading(false);
     }
   };
 
   return (
     <>
       <Header />
-      <div className="max-w-[1024px] md:w-[550px] md:h-[320px] mx-auto relative md:top-[100px] p-10 m-6 border-2 rounded-md">
-        <h2 className="md:text-3xl font-regular">Sign in</h2>
-        <p className="py-2">Nice to meet you! Enter your email to log in.</p>
+      <div className="max-w-[1024px] md:w-[550px] mx-auto p-10 border-2 rounded-md">
+        <h2 className="md:text-3xl">Sign in</h2>
         {errMsg && <p className="text-red-500">{errMsg}</p>}
-        <form onSubmit={handleSubmit} className="flex flex-col relative top-4">
-          <label htmlFor="email" className="mt-4">
-            Your Email
-          </label>
+        <form onSubmit={handleSubmit} className="flex flex-col mt-4">
+          <label htmlFor="email">Your Email</label>
           <input
             type="email"
             id="email"
-            className="border-2 p-1"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-
           <label htmlFor="password" className="mt-4">
             Password
           </label>
           <input
             type="password"
             id="password"
-            className="border-2 p-1"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
-          <div className="flex items-center justify-center my-8">
-            <button
-              type="submit"
-              className="bg-black text-white px-10 py-2 rounded-md font-Kanit"
-              disabled={loading}
-            >
-              {loading ? "Signing in..." : "Sign in"}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 mt-6"
+            disabled={loading}
+          >
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
         </form>
       </div>
     </>
