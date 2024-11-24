@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "./UserContext"; // Import the UserContext
 import Header from "./Header";
+import { useUser } from "./UserContext"; // Context for global user state
 
 const Sign = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state for submit
   const navigate = useNavigate();
-  const { setUser } = useUser(); // Get setUser from context
+  const { setUser } = useUser(); // Access setUser from context
 
-  // Reset error message when email or password changes
+  // Reset error message when input changes
   useEffect(() => {
     setErrMsg("");
   }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading spinner
 
     if (!email || !password) {
       setErrMsg("Please fill in both email and password.");
+      setLoading(false);
       return;
     }
 
@@ -35,21 +38,29 @@ const Sign = () => {
       if (response.ok) {
         const userData = await response.json();
         console.log("User Data:", userData); // Debugging
-        setUser(userData);
-        localStorage.setItem("authToken", userData.token);
+
+        // Save tokens in localStorage
+        localStorage.setItem("authToken", userData.access); // Access token
+        localStorage.setItem("refreshToken", userData.refresh); // Refresh token (if available)
+
+        // Set user context
+        setUser({
+          email: userData.email, // Adjust based on API response
+          token: userData.access,
+        });
+
+        // Navigate to the next page
         navigate("/navbar");
       } else {
         const data = await response.json();
         setErrMsg(
-          data.email
-            ? data.email[0]
-            : data.password
-            ? data.password[0]
-            : "Sign-in error."
+          data?.detail || "Sign-in error. Please check your credentials."
         );
       }
     } catch (error) {
       setErrMsg("Network error! Please try again.");
+    } finally {
+      setLoading(false); // Stop loading spinner
     }
   };
 
@@ -58,7 +69,7 @@ const Sign = () => {
       <Header />
       <div className="max-w-[1024px] md:w-[550px] md:h-[320px] mx-auto relative md:top-[100px] p-10 m-6 border-2 rounded-md">
         <h2 className="md:text-3xl font-regular">Sign in</h2>
-        <p className="py-2">Nice to meet you! Enter your email to login.</p>
+        <p className="py-2">Nice to meet you! Enter your email to log in.</p>
         {errMsg && <p className="text-red-500">{errMsg}</p>}
         <form onSubmit={handleSubmit} className="flex flex-col relative top-4">
           <label htmlFor="email" className="mt-4">
@@ -89,8 +100,9 @@ const Sign = () => {
             <button
               type="submit"
               className="bg-black text-white px-10 py-2 rounded-md font-Kanit"
+              disabled={loading}
             >
-              Sign-in
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </form>

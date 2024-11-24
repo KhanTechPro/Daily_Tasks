@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 const BASE_URL = "https://todoapi.pythonanywhere.com/api";
 
 const TaskManager = () => {
+  const { accessToken } = useContext(AuthContext); // Access token from context
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const [accessToken, setAccessToken] = useState(
-    localStorage.getItem("jwtToken") || ""
-  );
 
   // Fetch tasks on mount
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    if (accessToken) fetchTasks();
+  }, [accessToken]);
 
   // Fetch tasks from API
   const fetchTasks = async () => {

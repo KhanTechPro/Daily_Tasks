@@ -4,6 +4,7 @@ import { useUser } from "./UserContext";
 
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const { user } = useUser(); // Get user data from context
 
   const handleAddSpecialDayClick = () => {
@@ -26,7 +27,7 @@ const Navbar = () => {
         </div>
         <div>
           <img
-            src="/user-icon.png"
+            src={user?.profilePicture || "/user-icon.png"}
             alt="User Icon"
             className="w-10 h-10 rounded-full border-2 border-[#5200ff]"
           />
@@ -56,7 +57,9 @@ const Navbar = () => {
               <NavLink
                 to="/daily"
                 className={({ isActive }) =>
-                  isActive ? "bg-[#5200ff] text-white py-2 px-4" : "py-2 px-4"
+                  isActive
+                    ? "bg-[#5200ff] text-white py-2 px-4"
+                    : "py-2 px-4 hover:bg-gray-200"
                 }
               >
                 Today's Challenge
@@ -64,7 +67,9 @@ const Navbar = () => {
               <NavLink
                 to="/weekly"
                 className={({ isActive }) =>
-                  isActive ? "bg-[#5200ff] text-white py-2 px-4" : "py-2 px-4"
+                  isActive
+                    ? "bg-[#5200ff] text-white py-2 px-4"
+                    : "py-2 px-4 hover:bg-gray-200"
                 }
               >
                 Weekly Challenge
@@ -72,24 +77,38 @@ const Navbar = () => {
               <NavLink
                 to="/monthly"
                 className={({ isActive }) =>
-                  isActive ? "bg-[#5200ff] text-white py-2 px-4" : "py-2 px-4"
+                  isActive
+                    ? "bg-[#5200ff] text-white py-2 px-4"
+                    : "py-2 px-4 hover:bg-gray-200"
                 }
               >
                 Monthly Challenge
               </NavLink>
-              <NavLink
-                to="/add-special-day"
-                className={({ isActive }) =>
-                  isActive ? "bg-[#5200ff] text-white py-2 px-4" : "py-2 px-4"
-                }
+              <button
+                className="py-2 px-4 hover:bg-gray-200"
                 onClick={handleAddSpecialDayClick}
               >
                 + add special day
-              </NavLink>
+              </button>
             </nav>
           </aside>
         </div>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-md w-1/3">
+            <h2 className="text-lg font-bold">Add Special Day</h2>
+            <button
+              className="mt-4 px-4 py-2 bg-[#5200ff] text-white rounded"
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
