@@ -1,20 +1,19 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 
 // Create the context
-export const UserContext = createContext();
+const UserContext = createContext();
 
-// Custom hook to consume the UserContext
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-  return context;
-};
+// Custom hook for consuming the context
+export const useUser = () => useContext(UserContext);
 
-// Provider component to wrap the app
+// Context provider
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Example state
+  const [user, setUser] = useState({
+    accessToken: null,
+    refreshToken: null,
+    username: "",
+    email: "",
+  });
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

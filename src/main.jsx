@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import "../index.css";
+import "./index.css"; // Ensure the correct path
 import { UserProvider } from "./components/UserContext";
 
 const rootElement = document.getElementById("root");
@@ -10,11 +10,10 @@ const root = createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <UserProvider>
-        {" "}
+    <UserProvider>
+      <BrowserRouter>
         <App />
-      </UserProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </UserProvider>
   </React.StrictMode>
 );
