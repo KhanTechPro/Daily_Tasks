@@ -2,8 +2,10 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./AuthContext"; // Import AuthContext for dynamic buttons
 
-const Header = () => {
-  const { accessToken, logout } = useContext(AuthContext); // Access token and logout function
+export default function Header() {
+  // const { accessToken, logout } = useContext(AuthContext);
+  
+
 
   return (
     <header className="max-w-[1024px] mx-auto p-4 flex justify-between items-center border-b-2">
@@ -14,7 +16,7 @@ const Header = () => {
 
       {/* Navigation Links */}
       <div>
-        {accessToken ? (
+        {/* {accessToken ? (
           // Show Logout button if the user is signed in
           <button
             onClick={logout}
@@ -32,10 +34,9 @@ const Header = () => {
           >
             Sign-in
           </Link>
-        )}
+        )} */}
       </div>
     </header>
   );
-};
 
-export default Header;
+}
