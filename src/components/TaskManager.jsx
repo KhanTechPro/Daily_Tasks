@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "./AuthContext";
+import { createTask } from "./Api";
 
 const BASE_URL = "https://todoapi.pythonanywhere.com/api";
 
 const TaskManager = () => {
-  const { accessToken } = useContext(AuthContext); // Access token from context
+  const { accessToken } = useContext(AuthContext);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
 
@@ -39,16 +40,14 @@ const TaskManager = () => {
       return;
     }
     try {
-      const response = await fetch(`${BASE_URL}/tasks/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ title: newTask, status: "To Do" }),
-      });
-      if (response.ok) {
-        const task = await response.json();
+      const response = await createTask({
+        title: newTask,
+        status: "To Do"
+      })
+
+      if (response.status === 200) {
+        console.log(response.data)
+        const task = response.data;
         setTasks([...tasks, task]);
         setNewTask("");
       } else {
@@ -59,7 +58,6 @@ const TaskManager = () => {
     }
   };
 
-  // Update task status
   const updateStatus = async (taskId, newStatus) => {
     try {
       const response = await fetch(`${BASE_URL}/tasks/${taskId}/`, {

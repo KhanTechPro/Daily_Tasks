@@ -34,7 +34,7 @@ export const getTasks = async (filter) => {
 export const createTask = async (taskData) => {
   try {
     const response = await api.post(`/tasks/`, taskData);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error creating task:", error);
     throw error;

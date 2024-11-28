@@ -26,7 +26,7 @@ const Sign = () => {
     }
 
     try {
-      const response = await fetch("/api/accounts/signin/", {
+      const response = await fetch("https:opharm.uz/api/accounts/signin/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
